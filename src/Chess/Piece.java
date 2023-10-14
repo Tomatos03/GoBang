@@ -1,3 +1,5 @@
+package Chess;
+
 import java.awt.*;
 
 public class Piece {

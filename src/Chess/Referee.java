@@ -1,6 +1,12 @@
+package Chess;
+
+import interactInterface.EnquireUI;
+
+import javax.swing.*;
 import java.awt.*;
 
-public class Referee {
+
+public class Referee implements ChessAccord{
 	static Color currentPieceColor = Color.BLACK;
 	static int endCount = 5;
 
@@ -86,8 +92,22 @@ public class Referee {
 	}
 
 
-	public static boolean winLossVerifier (int[][] chessLog, int x, int y, int increment) {
-		return checkHorizontalAndVertical(chessLog, x, y, increment) || checkDiagonal(chessLog, x, y, increment);
+	public static void winLossVerifier (JFrame frame, ChessBoard chessBoard, int x, int y) {
+		int[][] chessLog = chessBoard.getChessLog();
+		int increment = chessBoard.getINCREMENT();
+		boolean win =  checkHorizontalAndVertical(chessLog, x, y, increment) || checkDiagonal(chessLog, x, y, increment);
+		if (!win) return;
+		String winner = Referee.getCurrentPieceColor() == Color.BLACK ? "黑" : "白";
+		winner += "棋获胜,是否要再来一局?";
+		EnquireUI enquireUI = new EnquireUI(frame, "游戏结束", winner,"再来一局", "退出游戏");
+		switch (enquireUI.getSelect()) {
+			case ACCEPT:
+				chessBoard.restartGame();
+				break;
+			case REJECT:
+				chessBoard.endGame();
+				break;
+		}
 	}
 
 	private static boolean checkDiagonal(int[][] chessLog, int x, int y , int increment) {
