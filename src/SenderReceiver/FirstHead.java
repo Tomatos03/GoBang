@@ -21,8 +21,8 @@ public class FirstHead extends Thread {
 
 	@Override
 	public void run() {
-		BufferedWriter out = null;
-		BufferedReader in = null;
+		BufferedWriter out;
+		BufferedReader in;
 		try {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));

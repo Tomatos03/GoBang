@@ -44,18 +44,14 @@ public class EnquireUI extends JDialog implements ChessAccord {
 		dialog.add(rejectButton);
 
 		// 添加控件事件
-		acceptButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		acceptButton.addActionListener(e -> {
 				dialog.dispose();
 				select = ACCEPT;
-			}
 		});
 
-		rejectButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		rejectButton.addActionListener(e -> {
 				dialog.dispose();
 				select = REJECT;
-			}
 		});
 	}
 }

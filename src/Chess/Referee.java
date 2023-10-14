@@ -85,10 +85,7 @@ public class Referee implements ChessAccord{
 				++whitePiece;
 			}
 		}
-		if (blackPiece == endCount || whitePiece == endCount) {
-			return true;
-		}
-		return false;
+		return blackPiece == endCount || whitePiece == endCount;
 	}
 
 
@@ -193,10 +190,6 @@ public class Referee implements ChessAccord{
 			cur_y += increment;
 		}
 
-		if (blackPiece == endCount || whitePiece == endCount) {
-			return true;
-		}
-
-		return false;
+		return blackPiece == endCount || whitePiece == endCount;
 	}
 }

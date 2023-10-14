@@ -4,8 +4,6 @@ import Chess.ChessBoard;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainUI extends JFrame {
 	public MainUI(int width, int height) {
