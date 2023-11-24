@@ -1,5 +1,7 @@
 # GoBang
 
+由Java Swing框架实现的本地局域网联机五子棋程序
+
 ## 游戏截图
 <img width="441" alt="image" src="https://github.com/Tomatos03/GoBang/assets/123353009/310258ce-799f-4fca-9d02-748635bbbcf8">
 <br>
