@@ -1,14 +1,15 @@
-package Chess;
+package entity;
 
 import java.awt.*;
 
-public class Piece extends Point{
+public class Piece extends Point {
 	public Color color;
 
 	public Piece(int x, int y, Color color) {
 		super(x, y);
 		this.color = color;
 	}
+
 	public Piece(Point point, Color color) {
 		super(point);
 		this.color = color;

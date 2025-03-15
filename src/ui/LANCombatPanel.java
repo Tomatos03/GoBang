@@ -1,14 +1,13 @@
 package ui;
 
-import entity.ChessBoard;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class ModeSelectPanel extends JPanel {
+public class LANCombatPanel extends JPanel {
+
     private final MainFrame frame;
 
-    public ModeSelectPanel(MainFrame frame) {
+    public LANCombatPanel(MainFrame frame) {
         this.frame = frame;
         initializeUI();
     }
@@ -27,23 +26,21 @@ public class ModeSelectPanel extends JPanel {
         Box verticalBox = Box.createVerticalBox();
         verticalBox.add(Box.createVerticalGlue());
 
-        verticalBox.add(wrapInHorizontalCenterContainer(createHeader("五子棋游戏")));
+        verticalBox.add(wrapInHorizontalCenterContainer(createHeader("局域网对战")));
+
+        JButton createButton = createButton("创建房间");
         verticalBox.add(Box.createVerticalStrut(20));
+        verticalBox.add(wrapInHorizontalCenterContainer(createButton));
 
-        JButton testButton = createButton("测试");
-        verticalBox.add(wrapInHorizontalCenterContainer(testButton));
-
+        JButton joinButton = createButton("加入房间");
         verticalBox.add(Box.createVerticalStrut(25));
-
-        JButton lanCombatButton = createButton("局域网对战");
-        verticalBox.add(wrapInHorizontalCenterContainer(lanCombatButton));
+        verticalBox.add(wrapInHorizontalCenterContainer(joinButton));
 
         verticalBox.add(Box.createVerticalGlue());
         add(verticalBox);
 
-
-        lanCombatButton.addActionListener(e -> frame.updatePanel(new LANCombatPanel(frame)));
-        testButton.addActionListener(e -> frame.updatePanel(new ChessBoard(frame)));
+        createButton.addActionListener(e -> frame.updatePanel(new CreateRoomPanel(frame)));
+        joinButton.addActionListener(e -> frame.updatePanel(new JoinRoomPanel(frame)));
     }
 
     private JLabel createHeader(String title) {

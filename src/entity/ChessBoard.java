@@ -1,4 +1,4 @@
-package Chess;
+package entity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,10 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Objects;
 
-
 public class ChessBoard extends JPanel implements MouseListener {
-	private Color currentPlayer = Color.BLACK;
-
 	private final int INIT_X = 50;
 	private final int INIT_Y = 50;
 
@@ -27,9 +24,16 @@ public class ChessBoard extends JPanel implements MouseListener {
 	private final Color BACKGROUND_COLOR = new Color(210,105,30);
 	private final Color LINE_COLOR = Color.BLACK;
 
+	Color currentPieceColor = Color.BLACK;
 	private Piece[][] record = new Piece[ROWS + 1][COLUMNS + 1];
+	final JFrame frame;
 
-	public ChessBoard() {
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public ChessBoard(JFrame frame) {
+		this.frame = frame;
 		addMouseListener(this);
 	}
 
@@ -69,7 +73,7 @@ public class ChessBoard extends JPanel implements MouseListener {
 		return new Piece(x, y);
 	}
 
-	private Piece arrayToPieceCoordinate(Point point) {
+	Piece arrayToPieceCoordinate(Point point) {
 		return arrayToPieceCoordinate(point.x, point.y);
 	}
 
@@ -134,45 +138,47 @@ public class ChessBoard extends JPanel implements MouseListener {
 		repaint();
 	}
 
-	private boolean isValid(Point point) {
+	boolean isValid(Point point) {
 		if(Objects.isNull(point)) {
 			return false;
 		}
 		return 0 <= point.x && point.x <= COLUMNS && 0 <= point.y && point.y <= ROWS;
 	}
 
-	private boolean isColorSame(Piece piece0, Piece piece1) {
+	boolean isColorSame(Piece piece0, Piece piece1) {
 		return piece0.color.equals(piece1.color);
 	}
 
-	private boolean isPositionOccupied(Point point) {
+	boolean isPositionOccupied(Point point) {
 		if(Objects.isNull(point)) {
 			return false;
 		}
 		return !Objects.isNull(record[point.y][point.x]);
 	}
 
-	private boolean isWinner(Point point) {
+	boolean isWinner(Point point) {
 		Piece origin = record[point.y][point.x];
 		final int[] dx = {-1, 1, 0, 0, 1, 1, -1, -1}, dy = {0, 0, -1, 1, 1, -1, 1, -1};
-		int length = dx.length, count = 0;
+		int length = dx.length;
 		for(int i = 0; i < length; ++i) {
+			int samePieceNumber = 0;
 			Point point0 = new Point(point);
 			while(isValid(point0) && isPositionOccupied(point0) && isColorSame(record[point0.y][point0.x], origin)) {
-				++count;
+				++samePieceNumber;
 				point0.move(point0.x + dx[i], point0.y + dy[i]);
 			}
+			if(samePieceNumber >= END_GAME_PIECE_COUNT) {
+				return true;
+			}
 		}
-		// 中心位置重复计算了7次
-		count -= 7;
-		return count >= END_GAME_PIECE_COUNT;
+		return false;
 	}
 
-	private void nextPlayerRound() {
-		this.currentPlayer = currentPlayer == Color.BLACK ? Color.WHITE : Color.BLACK;
+	void nextPlayerRound() {
+		this.currentPieceColor = currentPieceColor == Color.BLACK ? Color.WHITE : Color.BLACK;
 	}
 
-	public Point findRecord(int x, int y) {
+	Point findRecord(int x, int y) {
 		for (int i = 0; i <= ROWS; i++) {
 			for (int j = 0; j <= COLUMNS; j++) {
 				Point point = arrayToPieceCoordinate(j, i);
@@ -186,14 +192,14 @@ public class ChessBoard extends JPanel implements MouseListener {
 		return null;
 	}
 
-	public boolean placePiece(Point point) {
+	boolean placePiece(Point point) {
 		if (Objects.isNull(point) || isPositionOccupied(point)) {
 			return false; // 位置被占用，无法落子
 		}
 
 		// 创建并放置棋子
 		Piece piece = arrayToPieceCoordinate(point);
-		piece.setColor(currentPlayer);
+		piece.setColor(currentPieceColor);
 		recordPieceMove(piece, point);
 		return true; // 落子成功
     }
@@ -212,9 +218,30 @@ public class ChessBoard extends JPanel implements MouseListener {
 			return;
 		}
 		if(isWinner(point)) {
-			System.out.println("Player won!");
+			int result = gameEndConfirm();
+			handlePlayerChoice(result);
+			return;
 		}
 		nextPlayerRound();
+	}
+
+	void handlePlayerChoice(int result) {
+		if (result == JOptionPane.NO_OPTION) {
+			frame.dispose();
+			System.exit(0);
+		} else {
+			restartGame();
+		}
+	}
+
+	int gameEndConfirm() {
+		return JOptionPane.showConfirmDialog(
+				frame,
+				" 是否要重新开始游戏？ ",
+				"提示",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE
+		);
 	}
 
 	@Override

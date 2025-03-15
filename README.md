@@ -1,80 +1,42 @@
-# GoBang
+<div align="center">
+  <img src="https://pic3.zhimg.com/v2-f4810ae0a4ce545505d795d6b5b4c0bf_1440w.jpg?source=172ae18b" width="150" height="100" alt="项目图标"/>
+  <h1 align="center">局域网五子棋游戏</h1>
+</div>
 
-由Java Swing框架实现的本地局域网联机五子棋程序
+## 项目介绍
 
-## 游戏截图
-<img width="441" alt="image" src="https://github.com/Tomatos03/GoBang/assets/123353009/310258ce-799f-4fca-9d02-748635bbbcf8">
-<br>
-<img width="361" alt="image" src="https://github.com/Tomatos03/GoBang/assets/123353009/7fd8312f-8e67-4b2f-a354-4dc73a913a65">
-<br>
-<img width="363" alt="image" src="https://github.com/Tomatos03/GoBang/assets/123353009/fbd67042-614d-4963-bbc5-f48283479a48">
-<br>
-<img width="149" alt="image" src="https://github.com/Tomatos03/GoBang/assets/123353009/43a4165a-cf6e-4b0a-a6fc-04531a03b5ce">
-<br>
-<img width="664" alt="image" src="https://github.com/Tomatos03/GoBang/assets/123353009/77ecbba3-9704-441d-81a7-38ab7246f87b">
-<br>
-<img width="662" alt="image" src="https://github.com/Tomatos03/GoBang/assets/123353009/2a1bb252-28f7-4e81-bb23-29ee35f85abc">
-
-> **许多功能还没有完善**
-
-## 软件包分类
-
-### Chess包
-
->存放棋盘类、棋子类、裁判类
-
-### InteractInterface包
-
->存放所有的界面类
-
-### SenderReceiver包
-
->存放发送接收相关的类
-
-## 已实现的功能
-
-+ 基于UDP广播和TCP的联机对战
-
-## 待修复的BUG
-
-+ 进行对局时数据丢失造成少棋子现象
+基于 Java Swing框架实现的局域网五子棋游戏，主要目的在于学习和巩固Java相关知识
 
 
+## 项目依赖
+* JDK8+
 
-## 相关类及其说明
+## 包结构
 
-### ChessAccord
+```
+src/
+├── ApplicationBoot.java          // 程序启动入口
+├── entity/
+│   ├── ChessBoard.java          // 棋盘基础逻辑实现
+│   ├── LanChessBoard.java       // 网络对战棋盘扩展逻辑
+│   └── Piece.java               // 棋子数据模型
+├── network/
+│   ├── Message.java             // 网络消息协议定义
+│   └── NetworkHandler.java      // 网络通信核心处理
+└── ui/
+    ├── CreateRoomPanel.java     // 创建房间界面
+    ├── JoinRoomPanel.java       // 加入房间界面
+    ├── LANCombatPanel.java      // 网络对战主界面
+    ├── MainFrame.java           // 程序主窗口
+    └── ModeSelectPanel.java     // 模式选择界面
+```
+## 运行截图
+<img src="./images/4.png">
 
-> 存放一些常用的的常数
+<img src="./images/1.png">
 
-### ChessBoard
+<img src="./images/2.png">
 
-> 棋盘类用于初始棋盘，操作棋盘
+<img src="./images/3.png">
 
-### Piece
-
-> 棋类用于封装棋子相关属性
-
-### Referee
-
-> 裁判类用于判断对局情况，以及回合切换
-
-### EnquireUI
-
-> 询问窗口
-
-### MainUI
-
-> 主游戏界面窗口
-
-### ModeSelectUI
-
-> 模式选择窗口
-
-### RoomSearcherUI
-
-> 搜索窗口
-
-### WaitConnectUI
-
-> 等待窗口
+<img src="./images/5.png">
