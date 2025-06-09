@@ -1,6 +1,5 @@
 package entity;
 
-import com.sun.istack.internal.NotNull;
 import network.listeners.NetworkMessageListener;
 
 import javax.swing.*;
@@ -154,7 +153,7 @@ public class ChessBoard extends JPanel implements MouseListener {
 		return null;
 	}
 
-	private boolean isGameEnd(@NotNull Piece piece) {
+	private boolean isGameEnd(Piece piece) {
 		final int[] dx = {-1, 1, 0, 0, 1, 1, -1, -1}, dy = {0, 0, -1, 1, 1, -1, 1, -1};
 		int length = dx.length;
 
@@ -183,7 +182,7 @@ public class ChessBoard extends JPanel implements MouseListener {
 	 * @param piece 棋子对象
 	 * @return 如果棋子在棋盘范围内，返回 true；否则返回 false
 	 */
-	public boolean isInChessBoardRange(@NotNull Piece piece) {
+	public boolean isInChessBoardRange(Piece piece) {
 		int x = piece.x, y = piece.y;
 		return START_X <= x && x <= END_X && START_Y <= y && y <= END_Y;
 	}
@@ -194,7 +193,7 @@ public class ChessBoard extends JPanel implements MouseListener {
 	 * @param point 棋盘上的点
 	 * @return 如果该位置已经有棋子，返回 true；否则返回 false
 	 */
-	public boolean isOccupied(@NotNull Point point) {
+	public boolean isOccupied(Point point) {
 		for (Piece p : moveHistory) {
 			if (p.x == point.x && p.y == point.y) {
 				return true; // 棋子已存在
@@ -209,11 +208,11 @@ public class ChessBoard extends JPanel implements MouseListener {
 	 * @param piece 棋子对象
 	 * @return 如果该棋子已经存在于棋盘上，返回 true；否则返回 false
 	 */
-	public boolean isExistPiece(@NotNull Piece piece) {
+	public boolean isExistPiece(Piece piece) {
 		return moveHistory.contains(piece);
 	}
 
-	public boolean placePiece(@NotNull Piece piece) {
+	public boolean placePiece(Piece piece) {
 		moveHistory.add(piece);
 		repaint();
 		return isGameEnd(piece);

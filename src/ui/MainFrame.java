@@ -2,9 +2,6 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 
 public class MainFrame extends JFrame {
 	private final int WIDTH = 1000;

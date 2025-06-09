@@ -1,6 +1,5 @@
 package network;
 
-import com.sun.istack.internal.NotNull;
 import entity.ChessBoard;
 import entity.Piece;
 import network.entity.Message;
@@ -40,7 +39,7 @@ public class NetworkHandler implements NetworkMessageListener {
     }
 
     @Override
-    public void onPiecePlaced(@NotNull Piece piece) {
+    public void onPiecePlaced(Piece piece) {
         // 检查棋子是否被占用
         if (chessBoard.isOccupied(piece)) {
             return;
