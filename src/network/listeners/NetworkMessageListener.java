@@ -1,6 +1,7 @@
 package network.listeners;
 
 import entity.Piece;
+import network.entity.RestartRequest;
 
 /**
  * @Description: TODO
@@ -14,7 +15,7 @@ public interface NetworkMessageListener {
 
     void onOpponentWin();
 
-    void onQueryResetGame();
+    void onQueryResetGame(RestartRequest request);
 
     void onOpponentPlacePiece(Piece piece);
 

@@ -3,6 +3,7 @@ package network;
 import entity.ChessBoard;
 import entity.Piece;
 import network.entity.Message;
+import network.entity.RestartRequest;
 import network.listeners.NetworkMessageListener;
 import ui.impl.GameDialogHandle;
 
@@ -19,6 +20,7 @@ public class NetworkHandler implements NetworkMessageListener {
     private final MessageReceiver receiver;
     private final ChessBoard chessBoard;
     private final GameDialogHandle gameDialogHandle;
+    private RestartRequest restartRequest = new RestartRequest(Long.MAX_VALUE);
 
     public NetworkHandler(Socket socket, ChessBoard chessBoard, GameDialogHandle gameDialogHandle) throws IOException {
         this.socket = socket;
@@ -36,6 +38,20 @@ public class NetworkHandler implements NetworkMessageListener {
 
     public void start() {
         receiver.start();
+    }
+
+    private void restartGame() {
+        if (socket.isClosed()) {
+            return;
+        }
+        restartRequest = new RestartRequest(System.currentTimeMillis());
+        sender.sendMessage(Message.reset(restartRequest));
+        gameDialogHandle.showWaitingForOpponentRestart(chessBoard);
+    }
+
+    private void playerQuit() {
+        sender.sendMessage(Message.quit());
+        closeResources();
     }
 
     @Override
@@ -58,7 +74,7 @@ public class NetworkHandler implements NetworkMessageListener {
         gameDialogHandle.gameEnd(
                 "Game Over You Win!",
                 chessBoard,
-                this::waitRestartGame,
+                this::restartGame,
                 this::playerQuit);
     }
 
@@ -72,39 +88,37 @@ public class NetworkHandler implements NetworkMessageListener {
     @Override
     public void onOpponentWin() {
         chessBoard.setGameOver();
-        gameDialogHandle.gameEnd("Game Over! You Lose!", chessBoard, this::waitRestartGame, this::playerQuit);
-    }
-
-    private void waitRestartGame() {
-        if (socket.isClosed()) {
-            return;
-        }
-        sender.sendMessage(Message.reset());
-        gameDialogHandle.showWaitingForOpponentRestart(chessBoard);
+        gameDialogHandle.gameEnd("Game Over! You Lose!", chessBoard, this::restartGame, this::playerQuit);
     }
 
     @Override
-    public void onQueryResetGame() {
+    public void onQueryResetGame(RestartRequest opponentRequest) {
         // 防止对方在游戏结束后请求重置游戏时，游戏结束弹窗仍然存在
         gameDialogHandle.closeGameEndDialog();
 
-        // 弹出确认重置游戏的对话框
-        boolean isResetGame = gameDialogHandle.confirmRestart("对方请求重置游戏，是否同意？", chessBoard);
-        if (!isResetGame) {
-            playerQuit();
-            return;
-        }
+        // 0 请求时间相同
+        // 1 对方请求时间更晚
+        // -1 对方请求时间更早
+        int compareResult = opponentRequest.compareTo(restartRequest);
 
-        // 如果同意重置游戏，发送确认消息给对方
-        if (!socket.isClosed()) {
-            sender.sendMessage(Message.confirm());
+        if (compareResult == 0) {
             chessBoard.resetBoard();
+        } else if (compareResult < 0) {
+            gameDialogHandle.closeWaitingForOpponentRestart();
+            boolean isResetGame = gameDialogHandle.confirmRestart("对方请求重置游戏，是否同意？", chessBoard);
+            if (!isResetGame) {
+                playerQuit();
+                return;
+            }
+            // 如果同意重置游戏，发送确认消息给对方
+            if (!socket.isClosed()) {
+                sender.sendMessage(Message.confirm());
+                chessBoard.resetBoard();
+                restartRequest = new RestartRequest(Long.MAX_VALUE);
+            }
+        } else {
+            gameDialogHandle.showWaitingForOpponentRestart(chessBoard);
         }
-    }
-
-    private void playerQuit() {
-        sender.sendMessage(Message.quit());
-        closeResources();
     }
 
     @Override
@@ -117,6 +131,7 @@ public class NetworkHandler implements NetworkMessageListener {
     public void onResetGameConfirmed() {
         gameDialogHandle.closeWaitingForOpponentRestart();
         chessBoard.resetBoard();
+        restartRequest = new RestartRequest(Long.MAX_VALUE);
     }
 
     public void closeResources() {

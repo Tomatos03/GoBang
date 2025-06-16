@@ -1,15 +1,13 @@
 package network.entity;
 
 
-import entity.Piece;
-
 import java.io.Serializable;
 
 
 public class Message implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1313716282061442688L;
     private final Type type;
-    private final Piece piece;
+    private final Object data;
 
     public enum Type {
         MOVE,   // 落子消息
@@ -19,16 +17,12 @@ public class Message implements Serializable {
         CONFIRM_RESET // 确认重置游戏
     }
 
-    public static Message move(Piece piece) {
-        return new Message(Type.MOVE, piece);
+    public static Message move(Object data) {
+        return new Message(Type.MOVE, data);
     }
 
     public static Message win() {
         return new Message(Type.WIN, null);
-    }
-
-    public static Message reset() {
-        return new Message(Type.RESET, null);
     }
 
     public static Message quit() {
@@ -39,16 +33,20 @@ public class Message implements Serializable {
         return new Message(Type.CONFIRM_RESET, null);
     }
 
-    public Message(Type type, Piece piece) {
+    public Message(Type type, Object data) {
         this.type = type;
-        this.piece = piece;
+        this.data = data;
+    }
+
+    public static Message reset(RestartRequest restartRequest) {
+        return new Message(Type.RESET, restartRequest);
     }
 
     public Type getType() {
         return type;
     }
 
-    public Piece getPiece() {
-        return piece;
+    public Object getData() {
+        return data;
     }
 }

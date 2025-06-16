@@ -1,5 +1,7 @@
 package network;
 
+import entity.Piece;
+import network.entity.RestartRequest;
 import network.listeners.NetworkMessageListener;
 import network.entity.Message;
 
@@ -34,10 +36,10 @@ public class MessageReceiver extends Thread {
                         listener.onOpponentQuit();
                         break;
                     case RESET:
-                        listener.onQueryResetGame();
+                        listener.onQueryResetGame((RestartRequest) message.getData());
                         break;
                     case MOVE:
-                        listener.onOpponentPlacePiece(message.getPiece());
+                        listener.onOpponentPlacePiece((Piece) message.getData());
                         break;
                     case CONFIRM_RESET:
                         listener.onResetGameConfirmed();
@@ -45,6 +47,7 @@ public class MessageReceiver extends Thread {
                 }
             }
         } catch (IOException | ClassNotFoundException ignored) {
+            System.out.println(ignored.getMessage());
         }
     }
 }
