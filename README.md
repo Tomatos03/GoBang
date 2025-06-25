@@ -11,34 +11,34 @@
 
 -   JDK8+
 
-## 包结构
+## 项目结构
 
 ```
 src/
-├── ApplicationBoot.java              // 程序启动入口
-├── contants/
-│   └── NetWorkConstant.java          // 网络常量定义
+├── ApplicationBoot.java                  // 程序启动入口
+├── constants/
+│   └── NetWorkConstant.java              // 网络常量定义
 ├── entity/
-│   ├── ChessBoard.java               // 棋盘基础逻辑实现
-│   ├── Piece.java                    // 棋子数据模型
-│   └── Player.java                   // 玩家数据模型
+│   ├── ChessBoard.java                   // 棋盘基础逻辑实现
+│   ├── Piece.java                        // 棋子数据模型
+│   └── Player.java                       // 玩家数据模型
 ├── network/
-│   ├── MessageReceiver.java          // 消息接收器
-│   ├── MessageSender.java            // 消息发送器
-│   ├── NetworkHandler.java           // 网络通信核心处理
+│   ├── MessageReceiver.java              // 消息接收器
+│   ├── MessageSender.java                // 消息发送器
+│   ├── NetworkHandler.java               // 网络通信核心处理
 │   ├── entity/
-│   │   └── Message.java              // 网络消息协议定义
+│   │   └── Message.java                  // 网络消息协议定义
 │   └── listeners/
-│       └── NetworkMessageListener.java // 网络消息监听接口
+│       └── NetworkMessageListener.java   // 网络消息监听接口
 └── ui/
-    ├── CreateRoomPanel.java          // 创建房间界面
-    ├── IGameDialog.java              // 游戏对话框接口
-    ├── JoinRoomPanel.java            // 加入房间界面
-    ├── LANCombatPanel.java           // 网络对战主界面
-    ├── MainFrame.java                // 程序主窗口
-    ├── ModeSelectPanel.java          // 模式选择界面
-    └── impl/
-        └── GameDialogHandle.java     // 游戏对话框实现
+  ├── CreateRoomPanel.java              // 创建房间界面
+  ├── IGameDialog.java                  // 游戏对话框接口
+  ├── JoinRoomPanel.java                // 加入房间界面
+  ├── LANCombatPanel.java               // 网络对战主界面
+  ├── MainFrame.java                    // 程序主窗口
+  ├── ModeSelectPanel.java              // 模式选择界面
+  └── impl/
+    └── GameDialogHandle.java         // 游戏对话框实现
 ```
 
 ## 运行截图
